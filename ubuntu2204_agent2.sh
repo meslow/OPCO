@@ -30,7 +30,7 @@ echo "Début de la configuration de Zabbix"
 read -p "Veuillez saisir le nom de la machine : " Nom_DE_LA_MACHINE
 
 # Demander à l'utilisateur si les lignes TLS doivent être configurées
-read -p "Voulez-vous configurer les cryptage PSK ? (Oui/Non) : " CONFIGURER_PSK
+# read -p "Voulez-vous configurer les cryptage PSK ? (Oui/Non) : " CONFIGURER_PSK
 
 # Configurer l'agent Zabbix
 sed -i "s/Server=127.0.0.1/Server=10.230.82.34/" /etc/zabbix/zabbix_agent2.conf
@@ -39,19 +39,19 @@ sed -i "s/Hostname=Zabbix server/Hostname=$Nom_DE_LA_MACHINE/" /etc/zabbix/zabbi
 sed -i "s/# HostMetadata=/HostMetadata=Linux/" /etc/zabbix/zabbix_agent2.conf
 
 # Configurer les lignes PSK si demandé
-if [[ "$CONFIGURER_PSK" =~ ^[Oo][Uu][Ii]$ ]]; then
-  sed -i 's/# TLSAccept=unencrypted/TLSAccept=psk/' /etc/zabbix/zabbix_agent2.conf
-  sed -i 's/# TLSConnect=unencrypted/TLSConnect=psk/' /etc/zabbix/zabbix_agent2.conf
-  read -p "Veuillez saisir l'identité TLSPSK : " TLSPSKIdentity
-  read -p "Veuillez saisir la key souhaite TLSPSK : " TLSPSK
-  read -p "Veuillez saisir le chemin vers le fichier TLSPSK : " TLSPSKFile
-  echo $TLSPSK > $TLSPSKFile
-  echo "TLSPSKIdentity=$TLSPSKIdentity"
-  echo "TLSPSKFile=$TLSPSKFile"
-  sed -i 's/# TLSPSKIdentity=/TLSPSKIdentity=$TLSPSKIdentity/' /etc/zabbix/zabbix_agent2.conf
-  sed -i 's/# TLSPSKFile=/TLSPSKFile=$TLSPSKFile/' /etc/zabbix/zabbix_agent2.conf
-  echo "Configuration PSK effectuée"
-fi
+# if [[ "$CONFIGURER_PSK" =~ ^[Oo][Uu][Ii]$ ]]; then
+#   sed -i 's/# TLSAccept=unencrypted/TLSAccept=psk/' /etc/zabbix/zabbix_agent2.conf
+#   sed -i 's/# TLSConnect=unencrypted/TLSConnect=psk/' /etc/zabbix/zabbix_agent2.conf
+#   read -p "Veuillez saisir l'identité TLSPSK : " TLSPSKIdentity
+#   read -p "Veuillez saisir la key souhaite TLSPSK : " TLSPSK
+#   read -p "Veuillez saisir le chemin vers le fichier TLSPSK : " TLSPSKFile
+#   echo $TLSPSK > $TLSPSKFile
+#   echo "TLSPSKIdentity=$TLSPSKIdentity"
+#   echo "TLSPSKFile=$TLSPSKFile"
+#   sed -i 's/# TLSPSKIdentity=/TLSPSKIdentity=$TLSPSKIdentity/' /etc/zabbix/zabbix_agent2.conf
+#   sed -i 's/# TLSPSKFile=/TLSPSKFile=$TLSPSKFile/' /etc/zabbix/zabbix_agent2.conf
+#   echo "Configuration PSK effectuée"
+# fi
 
 # Démarrer l'agent Zabbix 
 systemctl restart zabbix-agent2
